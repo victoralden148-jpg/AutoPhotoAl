@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.autophoto.ai.data.repository.PhotoRepository
+import com.autophoto.ai.domain.CaptureHints
 import com.autophoto.ai.domain.PhotoProcessor
 import com.autophoto.ai.domain.model.MoodResult
 import com.autophoto.ai.domain.model.PhotoFilter
@@ -50,7 +51,7 @@ class EditViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isProcessing = true, error = null) }
             try {
-                val r = processor.process(captureFile.absolutePath)
+                val r = processor.process(captureFile.absolutePath, CaptureHints.get(captureFile.name))
                 _state.update {
                     it.copy(
                         isProcessing = false, original = r.original, result = r.result,
